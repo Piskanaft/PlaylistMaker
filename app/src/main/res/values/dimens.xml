@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="header_height">56dp</dimen>
+    <dimen name="textview_big">22sp</dimen>
+    <dimen name="textview_normal">16sp</dimen>
+    <dimen name="gap_big">24dp</dimen>
+    <dimen name="gap_normal">16dp</dimen>
+    <dimen name="icon_padding">8dp</dimen>
+    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="settings_row_height">61dp</dimen>
+    <dimen name="settings_padding_end">12dp</dimen>
+</resources>
