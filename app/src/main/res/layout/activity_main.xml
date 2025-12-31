@@ -10,15 +10,24 @@
     android:paddingBottom="28dp">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/header_height"
-        android:gravity="center"
-        android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textview_big">
+    <!--    <TextView-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="@dimen/header_height"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="@string/app_name"-->
+    <!--        android:textColor="@color/white"-->
+    <!--        android:textSize="@dimen/textview_big">-->
 
-    </TextView>
+    <!--    </TextView>-->
+
+    <com.google.android.material.appbar.MaterialToolbar
+        style="@style/Toolbar"
+        app:titleTextColor="@color/white"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/ToolbarTitleText"
+        >
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <Button
         android:id="@+id/search_button"
