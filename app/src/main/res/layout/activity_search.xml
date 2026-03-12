@@ -1,10 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+
+    android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        style="@style/Toolbar"
+        app:navigationIcon="@drawable/arrow_back"
+        app:title="@string/search"
+        app:titleMarginStart="8dp"
+        app:titleTextAppearance="@style/ToolbarTitleText" />
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        app:boxBackgroundColor="?attr/colorSurfaceVariant"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusBottomEnd="8dp"
+        app:boxCornerRadiusBottomStart="8dp"
+        app:boxCornerRadiusTopEnd="8dp"
+        app:boxCornerRadiusTopStart="8dp"
+        app:boxStrokeWidth="0dp"
+        app:boxStrokeWidthFocused="0dp"
+        app:endIconDrawable="@drawable/clear"
+        app:endIconMode="custom"
+        app:endIconTint="?attr/colorOnSurfaceVariant"
+        app:hintEnabled="false"
+        app:startIconDrawable="@drawable/search_icon"
+        app:startIconTint="?attr/colorOnSurfaceVariant">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:drawablePadding="-8dp"
+            android:gravity="center_vertical"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:paddingVertical="8dp"
+            android:textColor="@color/black"
+            android:textColorHint="?attr/colorOnSurfaceVariant"
+            android:textSize="@dimen/text_normal" />
+
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+</LinearLayout>
