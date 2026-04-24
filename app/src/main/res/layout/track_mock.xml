@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="61dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@android:color/transparent"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="13dp"
+        android:paddingEnd="12dp">
+
+        <ImageView
+            android:id="@+id/artworkUrl100"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="8dp"
+            tool:src="@drawable/art_mock"
+            >
+
+        </ImageView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/trackName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="@dimen/text_normal"
+                tool:text="ArtistArtistArtistArtistArtistArtistArtistArtist">
+
+            </TextView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/artistName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="?attr/colorOnSurfaceVariantInverted"
+                    android:textSize="@dimen/text_small"
+                    tool:text="TitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitleTitle">
+
+                </TextView>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="3dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@drawable/dot_gap"
+                    android:backgroundTint="?attr/colorOnSurfaceVariantInverted" />
+
+                <TextView
+                    android:id="@+id/trackTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurfaceVariantInverted"
+                    android:textSize="@dimen/text_small"
+                    tool:text="2:55">
+
+                </TextView>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/arrow_forward"
+            app:tint="?attr/colorOnSurfaceVariantInverted">
+
+        </ImageView>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
