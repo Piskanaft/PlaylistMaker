@@ -30,7 +30,7 @@ class TrackAdapter(
 }
 
 class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.track_mock, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.track_item, parent, false)
 ) {
 
     private val trackName: TextView = itemView.findViewById(R.id.trackName)
