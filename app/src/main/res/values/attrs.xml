@@ -2,4 +2,5 @@
 <resources>
     <attr name="mainScreenBackground" format="color" />
     <attr name="searchFieldBackground" format="color" />
+    <attr name="colorOnSurfaceVariantInverted" format="color" />
 </resources>

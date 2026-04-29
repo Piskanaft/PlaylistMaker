@@ -8,6 +8,7 @@
         <item name="colorOnBackground">@color/black</item>
         <item name="colorOnSurface">@color/black</item>
         <item name="colorOnSurfaceVariant">@color/text_gray</item>
+        <item name="colorOnSurfaceVariantInverted">@color/text_gray</item>
 
         <item name="colorPrimary">@color/blue</item>
         <item name="colorOnPrimary">@color/white</item>
