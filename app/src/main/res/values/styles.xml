@@ -2,7 +2,7 @@
 <resources>
 
     <style name="ToolbarTitleText">
-        <item name="android:textSize">@dimen/text_big</item>
+        <item name="android:textSize">@dimen/text_giant</item>
         <item name="android:textStyle">bold</item>
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
@@ -28,7 +28,7 @@
         <item name="cornerRadius">@dimen/corner_radius_medium</item>
         <item name="iconGravity">textStart</item>
         <item name="iconPadding">8dp</item>
-        <item name="android:textSize">@dimen/text_big</item>
+        <item name="android:textSize">@dimen/text_giant</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:insetBottom">0dp</item>
@@ -36,6 +36,16 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Widget.PlaylistMaker.Button.Rounded" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">?attr/colorSurface</item>
+        <item name="backgroundTint">?attr/colorOnSurface</item>
+        <item name="cornerRadius">@dimen/corner_radius_big</item>
+        <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="SettingsRow">
