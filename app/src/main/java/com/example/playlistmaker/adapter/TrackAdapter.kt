@@ -40,6 +40,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val artistName: TextView = itemView.findViewById(R.id.artistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
     private val artworkUrl100: ImageView = itemView.findViewById(R.id.artworkUrl100)
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
 
     fun bind(model: Track) {
@@ -47,7 +48,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         artistName.text = model.artistName?.trim() ?: "Unknown"
         model.artistName?.trim()?.let { Log.d("debug", it) }
         if (model.trackTime != null) {
-            trackTime.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTime)
+            trackTime.text = dateFormat.format(model.trackTime)
         } else {
             trackTime.text = "00:00"
         }
