@@ -1,5 +1,6 @@
 package com.example.playlistmaker.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.model.Track
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 
 class TrackAdapter(
@@ -37,14 +40,22 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     private val artistName: TextView = itemView.findViewById(R.id.artistName)
     private val trackTime: TextView = itemView.findViewById(R.id.trackTime)
     private val artworkUrl100: ImageView = itemView.findViewById(R.id.artworkUrl100)
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
 
     fun bind(model: Track) {
-        trackName.text = model.trackName
-        artistName.text = model.artistName
-        trackTime.text = model.trackTime
+        trackName.text = model.trackName?.trim() ?: "Unknown"
+        artistName.text = model.artistName?.trim() ?: "Unknown"
+        model.artistName?.trim()?.let { Log.d("debug", it) }
+        if (model.trackTime != null) {
+            trackTime.text = dateFormat.format(model.trackTime)
+        } else {
+            trackTime.text = "00:00"
+        }
+
         Glide.with(itemView).load(model.artworkUrl100)
-            .placeholder(R.drawable.album_placeholder).centerCrop().transform(
+            .placeholder(R.drawable.album_placeholder).error(R.drawable.album_placeholder)
+            .centerCrop().transform(
                 RoundedCorners(
                     itemView.resources
                         .getDimensionPixelSize(R.dimen.corner_radius_minimum)

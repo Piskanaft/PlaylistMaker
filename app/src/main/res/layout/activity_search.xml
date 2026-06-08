@@ -45,14 +45,53 @@
             android:drawablePadding="-8dp"
             android:gravity="center_vertical"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:paddingVertical="8dp"
+            android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="?attr/colorOnSurfaceVariant"
             android:textSize="@dimen/text_normal" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:id="@+id/searchStatusBlock"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="102dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/statusImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/search_nothing_found" />
+
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/search_network_issue"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="@dimen/text_big" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/statusButton"
+            style="@style/Widget.PlaylistMaker.Button.Rounded"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="24dp"
+            android:text="@string/refresh" />
+
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
