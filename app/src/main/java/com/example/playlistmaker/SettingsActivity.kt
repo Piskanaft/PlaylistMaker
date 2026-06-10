@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
@@ -18,6 +19,8 @@ class SettingsActivity : AppCompatActivity() {
     private val shareButton: TextView by lazy { findViewById(R.id.action_share_app) }
     private val supportButton: TextView by lazy { findViewById(R.id.action_contact_support) }
     private val agreementButton: TextView by lazy { findViewById(R.id.action_user_agreement) }
+    private val themeSwitcher by lazy {findViewById<SwitchMaterial>(R.id.themeSwitcher)}
+    private val sharedPrefs by lazy {getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +32,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-
+        themeSwitcher.isChecked = (applicationContext as App).darkTheme
         setListeners()
     }
 
@@ -62,6 +65,12 @@ class SettingsActivity : AppCompatActivity() {
             val intent =
                 Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.settings_agreement_url)))
             startActivity(intent)
+        }
+
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            (applicationContext as App).switchTheme(checked)
+            sharedPrefs.edit().putBoolean(THEME_SWITCH, checked).apply()
+
         }
     }
 }

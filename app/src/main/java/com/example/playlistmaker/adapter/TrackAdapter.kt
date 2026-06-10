@@ -1,6 +1,5 @@
 package com.example.playlistmaker.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,7 +14,8 @@ import java.util.Locale
 
 
 class TrackAdapter(
-    private val tracks: List<Track>
+    private val tracks: List<Track>,
+    private val onTrackClickListener: (Track) -> Unit
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -24,7 +24,11 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracks[position])
+        val track = tracks[position]
+        holder.bind(track)
+        holder.itemView.setOnClickListener {
+            onTrackClickListener(track)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -46,15 +50,17 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
     fun bind(model: Track) {
         trackName.text = model.trackName?.trim() ?: "Unknown"
         artistName.text = model.artistName?.trim() ?: "Unknown"
-        model.artistName?.trim()?.let { Log.d("debug", it) }
         if (model.trackTime != null) {
             trackTime.text = dateFormat.format(model.trackTime)
         } else {
             trackTime.text = "00:00"
         }
 
-        Glide.with(itemView).load(model.artworkUrl100)
+        val secureArtworkUrl = model.artworkUrl100?.replace("http://", "https://")
+
+        Glide.with(itemView).load(secureArtworkUrl)
             .placeholder(R.drawable.album_placeholder).error(R.drawable.album_placeholder)
+            .timeout(15000)
             .centerCrop().transform(
                 RoundedCorners(
                     itemView.resources
