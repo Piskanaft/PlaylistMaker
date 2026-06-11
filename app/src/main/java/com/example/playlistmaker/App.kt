@@ -6,6 +6,7 @@ const val PLAYLISTMAKER_PREFERENCES = "playlistmaker_preferences"
 const val THEME_SWITCH = "theme_switch"
 class App : Application() {
     var darkTheme = false
+        private set
 
     override fun onCreate() {
         super.onCreate()

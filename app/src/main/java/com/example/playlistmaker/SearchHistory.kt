@@ -8,33 +8,34 @@ import com.google.gson.reflect.TypeToken
 const val TRACK_HISTORY_KEY = "track_history_key"
 
 class SearchHistory(val pref: SharedPreferences) {
-
-    val historyTracks: ArrayList<Track> = read(pref)
+    private val gson = Gson()
+    private val _historyTracks: ArrayList<Track> = ArrayList(read(pref))
+    val historyTracks: List<Track> get() =_historyTracks
 
     fun addTrack(newTrack: Track) {
-        historyTracks.removeIf { it.trackId == newTrack.trackId }
-        historyTracks.add(0, newTrack)
+        _historyTracks.removeIf { it.trackId == newTrack.trackId }
+        _historyTracks.add(0, newTrack)
 
-        if (historyTracks.size > 10) {
-            historyTracks.subList(10, historyTracks.size).clear()
+        if (_historyTracks.size > 10) {
+            _historyTracks.subList(10, _historyTracks.size).clear()
         }
-        write(pref, historyTracks)
+        write(pref, _historyTracks)
     }
 
     fun clearHistory() {
-        historyTracks.clear()
-        write(pref, historyTracks)
+        _historyTracks.clear()
+        write(pref, _historyTracks)
     }
 
-    fun read(sharedPreferences: SharedPreferences): ArrayList<Track> {
+    private fun read(sharedPreferences: SharedPreferences): List<Track> {
         val json = sharedPreferences.getString(TRACK_HISTORY_KEY, null) ?: return arrayListOf()
 
         val type = object : TypeToken<ArrayList<Track>>() {}.type
-        return Gson().fromJson(json, type) ?: arrayListOf()
+        return gson.fromJson(json, type) ?: emptyList()
     }
 
-    fun write(sharedPreferences: SharedPreferences, tracks: ArrayList<Track>) {
-        val json = Gson().toJson(tracks)
+    private fun write(sharedPreferences: SharedPreferences, tracks: List<Track>) {
+        val json = gson.toJson(tracks)
         sharedPreferences.edit()
             .putString(TRACK_HISTORY_KEY, json)
             .apply()

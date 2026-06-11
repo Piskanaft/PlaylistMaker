@@ -59,12 +59,12 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         val secureArtworkUrl = model.artworkUrl100?.replace("http://", "https://")
 
         Glide.with(itemView).load(secureArtworkUrl)
-            .placeholder(R.drawable.album_placeholder).error(R.drawable.album_placeholder)
-            .timeout(15000)
-            .centerCrop().transform(
+            .placeholder(R.drawable.album_placeholder)
+            .error(R.drawable.album_placeholder)
+            .centerCrop()
+            .transform(
                 RoundedCorners(
-                    itemView.resources
-                        .getDimensionPixelSize(R.dimen.corner_radius_minimum)
+                    itemView.resources.getDimensionPixelSize(R.dimen.corner_radius_minimum)
                 )
             ).into(artworkUrl100)
     }
