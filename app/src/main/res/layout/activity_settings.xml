@@ -15,7 +15,9 @@
         app:titleMarginStart="8dp"
         app:titleTextAppearance="@style/ToolbarTitleText" />
 
+
     <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/themeSwitcher"
         style="@style/SettingsRow"
         android:layout_marginTop="@dimen/gap_big"
         android:paddingVertical="21dp"
