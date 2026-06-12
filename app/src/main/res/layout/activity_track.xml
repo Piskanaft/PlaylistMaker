@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="28dp">
+        android:paddingBottom="20dp">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
