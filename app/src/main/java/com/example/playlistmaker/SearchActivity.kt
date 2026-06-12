@@ -74,10 +74,10 @@ class SearchActivity : AppCompatActivity() {
         override fun onResponse(
             call: Call<TrackResponse>, response: Response<TrackResponse>
         ) {
-
             if (response.isSuccessful) {
                 resultTracks.clear()
                 val downloadedTracks = response.body()?.results
+
                 if (!downloadedTracks.isNullOrEmpty()) {
                     resultTracks.addAll(downloadedTracks)
                     resultsTrackAdapter.notifyDataSetChanged()
@@ -120,12 +120,14 @@ class SearchActivity : AppCompatActivity() {
         resultsTrackAdapter = TrackAdapter(resultTracks) { clickedTrack ->
             searchHistory.addTrack(clickedTrack)
             historyAdapter.notifyDataSetChanged()
+            startActivity(TrackActivity.intentFactory(this, clickedTrack))
         }
         resultsRecyclerView.adapter = resultsTrackAdapter
 
         historyAdapter = TrackAdapter(searchHistory.historyTracks) { clickedTrack ->
             searchHistory.addTrack(clickedTrack)
             historyAdapter.notifyDataSetChanged()
+            startActivity(TrackActivity.intentFactory(this, clickedTrack))
         }
         searchHistoryRecyclerView.adapter = historyAdapter
 

@@ -19,21 +19,21 @@
     <Button
         android:id="@+id/search_button"
         style="@style/ButtonLarge"
-        android:layout_marginTop="@dimen/gap_big"
+        android:layout_marginTop="@dimen/gap_large"
         android:text="@string/search"
         app:icon="@drawable/search_icon" />
 
     <Button
         android:id="@+id/media_button"
         style="@style/ButtonLarge"
-        android:layout_marginTop="@dimen/gap_normal"
+        android:layout_marginTop="@dimen/gap_medium"
         android:text="@string/media"
         app:icon="@drawable/media_icon" />
 
     <Button
         android:id="@+id/settings_button"
         style="@style/ButtonLarge"
-        android:layout_marginTop="@dimen/gap_normal"
+        android:layout_marginTop="@dimen/gap_medium"
         android:text="@string/settings"
         app:icon="@drawable/settings_icon" />
 
