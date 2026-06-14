@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
@@ -36,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 private const val iTunesBaseUrl = "https://itunes.apple.com/"
 
-
+@SuppressLint("NotifyDataSetChanged")
 class SearchActivity : AppCompatActivity() {
     private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
     private val searchInputLayout: TextInputLayout by lazy(mode = LazyThreadSafetyMode.NONE) {
@@ -81,7 +82,7 @@ class SearchActivity : AppCompatActivity() {
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
-    private var searchInputText = ""
+    private val searchRunnable = Runnable { searchRequest() }
     private var searchCall: Call<TrackResponse>? = null
     private lateinit var resultsTrackAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
@@ -154,6 +155,7 @@ class SearchActivity : AppCompatActivity() {
             historyAdapter.notifyDataSetChanged()
 
             if (clickDebounce()) {
+                handler.removeCallbacks(searchRunnable)
                 startActivity(TrackActivity.intentFactory(this, clickedTrack))
             }
         }
@@ -163,6 +165,7 @@ class SearchActivity : AppCompatActivity() {
             searchHistory.addTrack(clickedTrack)
             historyAdapter.notifyDataSetChanged()
             if (clickDebounce()) {
+                handler.removeCallbacks(searchRunnable)
                 startActivity(TrackActivity.intentFactory(this, clickedTrack))
             }
         }
@@ -174,7 +177,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_INPUT_TEXT, searchInputText)
+        outState.putString(SEARCH_INPUT_TEXT, searchInput.text.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -183,11 +186,6 @@ class SearchActivity : AppCompatActivity() {
         searchInput.setText(gotText)
     }
 
-    companion object {
-        private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
-        private const val TEXT_DEF = ""
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
-    }
 
     private fun setTextWatcher() {
         searchInputLayout.isEndIconVisible = false
@@ -199,17 +197,18 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 searchInputLayout.isEndIconVisible = !s.isNullOrEmpty()
+                searchStatusBlock.visibility = View.GONE
+                searchDebounce()
                 if (s.isNullOrEmpty()) {
                     resultTracks.clear()
                     resultsTrackAdapter.notifyDataSetChanged()
-                    searchStatusBlock.visibility = View.GONE
                     resultsRecyclerView.visibility = View.GONE
+
                 }
                 updateHistoryState()
             }
 
             override fun afterTextChanged(s: Editable?) {
-                searchInputText = s.toString()
             }
         }
         searchInput.addTextChangedListener(simpleTextWatcher)
@@ -224,12 +223,7 @@ class SearchActivity : AppCompatActivity() {
 
         searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                val query = searchInput.text?.toString()?.trim()
-                if (!query.isNullOrEmpty()) {
-                    searchStatusBlock.visibility = View.GONE
-                    searchCall = iTunesService.search(query)
-                    searchCall?.enqueue(searchCallback)
-                }
+
                 val inputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
                 inputMethodManager?.hideSoftInputFromWindow(searchInput.windowToken, 0)
@@ -241,13 +235,22 @@ class SearchActivity : AppCompatActivity() {
         }
         statusButton.setOnClickListener {
             searchStatusBlock.visibility = View.GONE
-            searchCall = searchCall?.clone()
-            searchCall?.enqueue(searchCallback)
+            searchRequest()
         }
         clearHistoryButton.setOnClickListener {
             searchHistory.clearHistory()
             historyAdapter.notifyDataSetChanged()
             historyGroup.visibility = View.GONE
+        }
+
+    }
+
+    private fun searchRequest() {
+        val query = searchInput.text?.toString()?.trim()
+        if (!query.isNullOrEmpty()) {
+            searchStatusBlock.visibility = View.GONE
+            searchCall = iTunesService.search(query)
+            searchCall?.enqueue(searchCallback)
         }
 
     }
@@ -277,6 +280,13 @@ class SearchActivity : AppCompatActivity() {
         return current
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        if (searchInput.text?.isNotEmpty() == true) {
+            handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        }
+    }
+
     private fun updateHistoryState() {
         val hasFocus = searchInput.hasFocus()
         val inputIsEmpty = searchInput.text.isNullOrEmpty()
@@ -286,6 +296,13 @@ class SearchActivity : AppCompatActivity() {
         } else {
             historyGroup.visibility = View.GONE
         }
+    }
+
+    companion object {
+        private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
+        private const val TEXT_DEF = ""
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 }
 
