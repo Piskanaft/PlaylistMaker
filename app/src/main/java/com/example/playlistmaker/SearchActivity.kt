@@ -80,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
             R.id.clearHistoryButton
         )
     }
-    private val progressBar: ProgressBar by lazy(mode = LazyThreadSafetyMode.NONE){
+    private val progressBar: ProgressBar by lazy(mode = LazyThreadSafetyMode.NONE) {
         findViewById(R.id.progressBar)
     }
 
@@ -209,7 +209,6 @@ class SearchActivity : AppCompatActivity() {
                     resultTracks.clear()
                     resultsTrackAdapter.notifyDataSetChanged()
                     resultsRecyclerView.visibility = View.GONE
-
                 }
                 updateHistoryState()
             }
@@ -229,6 +228,9 @@ class SearchActivity : AppCompatActivity() {
 
         searchInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                handler.removeCallbacks(searchRunnable)
+                searchRequest()
+
 
                 val inputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
