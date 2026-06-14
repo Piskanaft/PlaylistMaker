@@ -19,7 +19,7 @@
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/themeSwitcher"
         style="@style/SettingsRow"
-        android:layout_marginTop="@dimen/gap_big"
+        android:layout_marginTop="@dimen/gap_large"
         android:paddingVertical="21dp"
         android:text="@string/dark_theme" />
 
