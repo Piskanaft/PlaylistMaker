@@ -20,7 +20,7 @@ import java.util.Locale
 
 
 class TrackActivity : AppCompatActivity() {
-    private val toolbar: MaterialToolbar by lazy { findViewById(R.id.toolbar) }
+    private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
     private val trackName: TextView by lazy { findViewById(R.id.trackName) }
     private val artistName: TextView by lazy { findViewById(R.id.artistName) }
     private val duration: TextView by lazy { findViewById(R.id.durationValue) }
