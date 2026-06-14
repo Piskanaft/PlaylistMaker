@@ -2,6 +2,8 @@ package com.example.playlistmaker
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -37,18 +39,48 @@ private const val iTunesBaseUrl = "https://itunes.apple.com/"
 
 class SearchActivity : AppCompatActivity() {
     private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
-    private val searchInputLayout: TextInputLayout by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.search_input_layout) }
-    private val searchInput: TextInputEditText by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.search_input) }
-    private val resultsRecyclerView: RecyclerView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.resultsRecyclerView) }
-    private val searchHistoryRecyclerView: RecyclerView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.searchHistoryRecyclerView) }
+    private val searchInputLayout: TextInputLayout by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.search_input_layout
+        )
+    }
+    private val searchInput: TextInputEditText by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.search_input
+        )
+    }
+    private val resultsRecyclerView: RecyclerView by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.resultsRecyclerView
+        )
+    }
+    private val searchHistoryRecyclerView: RecyclerView by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.searchHistoryRecyclerView
+        )
+    }
 
-    private val searchStatusBlock: LinearLayout by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.searchStatusBlock) }
+    private val searchStatusBlock: LinearLayout by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.searchStatusBlock
+        )
+    }
     private val statusImage: ImageView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.statusImage) }
     private val statusText: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.statusText) }
     private val statusButton: Button by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.statusButton) }
-    private val historyGroup: ConstraintLayout by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.searchHistoryViewGroup) }
-    private val clearHistoryButton: MaterialButton by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.clearHistoryButton) }
+    private val historyGroup: ConstraintLayout by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.searchHistoryViewGroup
+        )
+    }
+    private val clearHistoryButton: MaterialButton by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById(
+            R.id.clearHistoryButton
+        )
+    }
 
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
     private var searchInputText = ""
     private var searchCall: Call<TrackResponse>? = null
     private lateinit var resultsTrackAdapter: TrackAdapter
@@ -120,14 +152,19 @@ class SearchActivity : AppCompatActivity() {
         resultsTrackAdapter = TrackAdapter(resultTracks) { clickedTrack ->
             searchHistory.addTrack(clickedTrack)
             historyAdapter.notifyDataSetChanged()
-            startActivity(TrackActivity.intentFactory(this, clickedTrack))
+
+            if (clickDebounce()) {
+                startActivity(TrackActivity.intentFactory(this, clickedTrack))
+            }
         }
         resultsRecyclerView.adapter = resultsTrackAdapter
 
         historyAdapter = TrackAdapter(searchHistory.historyTracks) { clickedTrack ->
             searchHistory.addTrack(clickedTrack)
             historyAdapter.notifyDataSetChanged()
-            startActivity(TrackActivity.intentFactory(this, clickedTrack))
+            if (clickDebounce()) {
+                startActivity(TrackActivity.intentFactory(this, clickedTrack))
+            }
         }
         searchHistoryRecyclerView.adapter = historyAdapter
 
@@ -149,6 +186,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         private const val SEARCH_INPUT_TEXT = "SEARCH_INPUT_TEXT"
         private const val TEXT_DEF = ""
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     private fun setTextWatcher() {
@@ -227,6 +265,16 @@ class SearchActivity : AppCompatActivity() {
             statusButton.visibility = View.GONE
         }
         searchStatusBlock.visibility = View.VISIBLE
+    }
+
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
     private fun updateHistoryState() {
