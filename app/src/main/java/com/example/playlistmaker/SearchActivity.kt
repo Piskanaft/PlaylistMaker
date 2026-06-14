@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -79,6 +80,9 @@ class SearchActivity : AppCompatActivity() {
             R.id.clearHistoryButton
         )
     }
+    private val progressBar: ProgressBar by lazy(mode = LazyThreadSafetyMode.NONE){
+        findViewById(R.id.progressBar)
+    }
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
@@ -107,6 +111,7 @@ class SearchActivity : AppCompatActivity() {
         override fun onResponse(
             call: Call<TrackResponse>, response: Response<TrackResponse>
         ) {
+            progressBar.visibility = View.GONE
             if (response.isSuccessful) {
                 resultTracks.clear()
                 val downloadedTracks = response.body()?.results
@@ -129,6 +134,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         override fun onFailure(call: Call<TrackResponse>, t: Throwable) {
+            progressBar.visibility = View.GONE
             showStatus(
                 R.drawable.search_network_issue, R.string.search_network_issue
             )
@@ -249,6 +255,8 @@ class SearchActivity : AppCompatActivity() {
         val query = searchInput.text?.toString()?.trim()
         if (!query.isNullOrEmpty()) {
             searchStatusBlock.visibility = View.GONE
+            resultsRecyclerView.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
             searchCall = iTunesService.search(query)
             searchCall?.enqueue(searchCallback)
         }
