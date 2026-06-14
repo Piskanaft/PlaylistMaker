@@ -15,12 +15,12 @@ import com.google.android.material.switchmaterial.SwitchMaterial
 
 
 class SettingsActivity : AppCompatActivity() {
-    private val toolbar: MaterialToolbar by lazy { findViewById(R.id.toolbar) }
-    private val shareButton: TextView by lazy { findViewById(R.id.action_share_app) }
-    private val supportButton: TextView by lazy { findViewById(R.id.action_contact_support) }
-    private val agreementButton: TextView by lazy { findViewById(R.id.action_user_agreement) }
-    private val themeSwitcher by lazy {findViewById<SwitchMaterial>(R.id.themeSwitcher)}
-    private val sharedPrefs by lazy {getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE)}
+    private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
+    private val shareButton: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.action_share_app) }
+    private val supportButton: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.action_contact_support) }
+    private val agreementButton: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.action_user_agreement) }
+    private val themeSwitcher by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById<SwitchMaterial>(R.id.themeSwitcher) }
+    private val sharedPrefs by lazy(mode = LazyThreadSafetyMode.NONE) { getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

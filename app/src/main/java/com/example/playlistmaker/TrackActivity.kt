@@ -21,22 +21,27 @@ import java.util.Locale
 
 class TrackActivity : AppCompatActivity() {
     private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
-    private val trackName: TextView by lazy { findViewById(R.id.trackName) }
-    private val artistName: TextView by lazy { findViewById(R.id.artistName) }
-    private val duration: TextView by lazy { findViewById(R.id.durationValue) }
-    private val durationKey: TextView by lazy { findViewById(R.id.durationKey) }
-    private val album: TextView by lazy { findViewById(R.id.albumValue) }
-    private val albumKey: TextView by lazy { findViewById(R.id.albumKey) }
+    private val trackName: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.trackName) }
+    private val artistName: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.artistName) }
+    private val duration: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.durationValue) }
+    private val durationKey: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.durationKey) }
+    private val album: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.albumValue) }
+    private val albumKey: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.albumKey) }
 
 
-    private val year: TextView by lazy { findViewById(R.id.yearValue) }
-    private val yearKey: TextView by lazy { findViewById(R.id.yearKey) }
+    private val year: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.yearValue) }
+    private val yearKey: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.yearKey) }
 
-    private val genre: TextView by lazy { findViewById(R.id.genreValue) }
-    private val country: TextView by lazy { findViewById(R.id.countryValue) }
-    private val cover: ImageView by lazy { findViewById(R.id.albumCover) }
+    private val genre: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.genreValue) }
+    private val country: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.countryValue) }
+    private val cover: ImageView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.albumCover) }
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private val dateFormat by lazy(mode = LazyThreadSafetyMode.NONE) {
+        SimpleDateFormat(
+            "mm:ss",
+            Locale.getDefault()
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +80,6 @@ class TrackActivity : AppCompatActivity() {
         if (!track.collectionName.isNullOrEmpty()) {
             album.visibility = View.VISIBLE
             albumKey.visibility = View.VISIBLE
-
             album.text = track.collectionName
         } else {
             album.visibility = View.GONE

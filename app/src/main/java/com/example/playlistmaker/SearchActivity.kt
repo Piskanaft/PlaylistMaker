@@ -36,18 +36,18 @@ private const val iTunesBaseUrl = "https://itunes.apple.com/"
 
 
 class SearchActivity : AppCompatActivity() {
-    private val toolbar: MaterialToolbar by lazy { findViewById(R.id.toolbar) }
-    private val searchInputLayout: TextInputLayout by lazy { findViewById(R.id.search_input_layout) }
-    private val searchInput: TextInputEditText by lazy { findViewById(R.id.search_input) }
-    private val resultsRecyclerView: RecyclerView by lazy { findViewById(R.id.resultsRecyclerView) }
-    private val searchHistoryRecyclerView: RecyclerView by lazy { findViewById(R.id.searchHistoryRecyclerView) }
+    private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
+    private val searchInputLayout: TextInputLayout by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.search_input_layout) }
+    private val searchInput: TextInputEditText by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.search_input) }
+    private val resultsRecyclerView: RecyclerView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.resultsRecyclerView) }
+    private val searchHistoryRecyclerView: RecyclerView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.searchHistoryRecyclerView) }
 
-    private val searchStatusBlock: LinearLayout by lazy { findViewById(R.id.searchStatusBlock) }
-    private val statusImage: ImageView by lazy { findViewById(R.id.statusImage) }
-    private val statusText: TextView by lazy { findViewById(R.id.statusText) }
-    private val statusButton: Button by lazy { findViewById(R.id.statusButton) }
-    private val historyGroup: ConstraintLayout by lazy { findViewById(R.id.searchHistoryViewGroup) }
-    private val clearHistoryButton: MaterialButton by lazy { findViewById(R.id.clearHistoryButton) }
+    private val searchStatusBlock: LinearLayout by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.searchStatusBlock) }
+    private val statusImage: ImageView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.statusImage) }
+    private val statusText: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.statusText) }
+    private val statusButton: Button by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.statusButton) }
+    private val historyGroup: ConstraintLayout by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.searchHistoryViewGroup) }
+    private val clearHistoryButton: MaterialButton by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.clearHistoryButton) }
 
     private var searchInputText = ""
     private var searchCall: Call<TrackResponse>? = null
@@ -56,19 +56,19 @@ class SearchActivity : AppCompatActivity() {
 
     val resultTracks = arrayListOf<Track>()
 
-    val sharedPreferences: SharedPreferences by lazy {
+    val sharedPreferences: SharedPreferences by lazy(mode = LazyThreadSafetyMode.NONE) {
         getSharedPreferences(
             PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE
         )
     }
-    private val searchHistory by lazy {
+    private val searchHistory by lazy(mode = LazyThreadSafetyMode.NONE) {
         SearchHistory(sharedPreferences)
     }
-    private val retrofit by lazy {
+    private val retrofit by lazy(mode = LazyThreadSafetyMode.NONE) {
         Retrofit.Builder().baseUrl(iTunesBaseUrl).addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    private val iTunesService by lazy { retrofit.create(ITunesApi::class.java) }
+    private val iTunesService by lazy(mode = LazyThreadSafetyMode.NONE) { retrofit.create(ITunesApi::class.java) }
 
     val searchCallback = object : Callback<TrackResponse> {
         override fun onResponse(
@@ -167,7 +167,6 @@ class SearchActivity : AppCompatActivity() {
                     searchStatusBlock.visibility = View.GONE
                     resultsRecyclerView.visibility = View.GONE
                 }
-
                 updateHistoryState()
             }
 
@@ -234,7 +233,6 @@ class SearchActivity : AppCompatActivity() {
         val hasFocus = searchInput.hasFocus()
         val inputIsEmpty = searchInput.text.isNullOrEmpty()
         if (hasFocus && inputIsEmpty && searchHistory.historyTracks.isNotEmpty()) {
-
             historyGroup.visibility = View.VISIBLE
             searchStatusBlock.visibility = View.GONE
         } else {
