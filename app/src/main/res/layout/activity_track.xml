@@ -56,11 +56,8 @@
             android:textSize="@dimen/text_extra_large"
             app:layout_constraintEnd_toEndOf="@id/right_inner"
             app:layout_constraintStart_toStartOf="@id/left_inner"
-
             app:layout_constraintTop_toBottomOf="@id/albumCover"
-            tools:text="Yesterday (Remastered 2009)">
-
-        </TextView>
+            tools:text="Yesterday (Remastered 2009)"/>
 
 
         <TextView
@@ -77,11 +74,12 @@
             tools:text="The Beatles " />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/play_button"
+            android:id="@+id/playPauseButton"
             style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:layout_marginTop="38dp"
+            android:enabled="false"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:padding="0dp"
@@ -104,20 +102,17 @@
             android:gravity="center"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-
             android:padding="0dp"
             app:icon="@drawable/add_to_playlist"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="51dp"
             app:iconTint="@null"
-
-
-            app:layout_constraintBottom_toBottomOf="@+id/play_button"
-            app:layout_constraintEnd_toStartOf="@+id/play_button"
+            app:layout_constraintBottom_toBottomOf="@+id/playPauseButton"
+            app:layout_constraintEnd_toStartOf="@+id/playPauseButton"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="@id/left_inner"
-            app:layout_constraintTop_toTopOf="@+id/play_button" />
+            app:layout_constraintTop_toTopOf="@+id/playPauseButton" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/add_to_favorite_button"
@@ -137,11 +132,11 @@
 
             app:iconTint="@null"
 
-            app:layout_constraintBottom_toBottomOf="@+id/play_button"
+            app:layout_constraintBottom_toBottomOf="@+id/playPauseButton"
             app:layout_constraintEnd_toEndOf="@id/right_inner"
             app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintStart_toEndOf="@+id/play_button"
-            app:layout_constraintTop_toTopOf="@+id/play_button" />
+            app:layout_constraintStart_toEndOf="@+id/playPauseButton"
+            app:layout_constraintTop_toTopOf="@+id/playPauseButton" />
 
         <TextView
             android:id="@+id/current_playtime"
@@ -149,12 +144,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:fontFamily="@font/ys_display_medium"
-            android:text="0:00"
+            android:text="00:00"
             android:textColor="?attr/colorOnSurface"
             android:textSize="@dimen/text_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/play_button">
+            app:layout_constraintTop_toBottomOf="@+id/playPauseButton">
 
         </TextView>
 
