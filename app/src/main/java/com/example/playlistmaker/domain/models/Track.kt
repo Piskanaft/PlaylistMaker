@@ -1,12 +1,14 @@
-package com.example.playlistmaker.model
+package com.example.playlistmaker.domain.models
 
-import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+import android.os.Parcelable
 
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Track(
     val trackName: String?,
     val artistName: String?,
-    @SerializedName("trackTimeMillis") val trackTime: Long?,
+    val trackTime: Long?,
     val artworkUrl100: String?,
     val trackId: Long?,
     val collectionName: String?,
@@ -14,7 +16,7 @@ data class Track(
     val primaryGenreName: String?,
     val country: String?,
     val previewUrl: String?
-) : Serializable {
+) : Parcelable {
 
     fun getCoverArtwork() = artworkUrl100?.replaceAfterLast('/', "512x512bb.jpg")
 

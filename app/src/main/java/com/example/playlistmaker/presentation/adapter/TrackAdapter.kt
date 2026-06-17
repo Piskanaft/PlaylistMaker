@@ -1,4 +1,4 @@
-package com.example.playlistmaker.adapter
+package com.example.playlistmaker.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
-import com.example.playlistmaker.model.Track
+import com.example.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -53,7 +53,7 @@ class TrackViewHolder(parent: ViewGroup) : RecyclerView.ViewHolder(
         if (model.trackTime != null) {
             trackTime.text = dateFormat.format(model.trackTime)
         } else {
-            trackTime.text = "00:00"
+            trackTime.text = itemView.context.getString(R.string.time_zero)
         }
 
         val secureArtworkUrl = model.artworkUrl100?.replace("http://", "https://")
