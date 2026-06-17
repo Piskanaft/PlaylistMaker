@@ -1,15 +1,15 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-
 import android.widget.TextView
-
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.playlistmaker.App
+import com.example.playlistmaker.presentation.Creator
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.ThemeSettings
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 
@@ -19,9 +19,13 @@ class SettingsActivity : AppCompatActivity() {
     private val shareButton: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.action_share_app) }
     private val supportButton: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.action_contact_support) }
     private val agreementButton: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.action_user_agreement) }
-    private val themeSwitcher by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById<SwitchMaterial>(R.id.themeSwitcher) }
-    private val sharedPrefs by lazy(mode = LazyThreadSafetyMode.NONE) { getSharedPreferences(PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE) }
-
+    private val themeSwitcher by lazy(mode = LazyThreadSafetyMode.NONE) {
+        findViewById<SwitchMaterial>(
+            R.id.themeSwitcher
+        )
+    }
+    private val settingsInteractor by lazy { Creator.provideSettingsInteractor(this) }
+    private val sharingInteractor by lazy { Creator.provideSharingInteractor(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
@@ -32,7 +36,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        themeSwitcher.isChecked = (applicationContext as App).darkTheme
+        themeSwitcher.isChecked = settingsInteractor.getThemeSettings().darkTheme
         setListeners()
     }
 
@@ -40,36 +44,21 @@ class SettingsActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
 
         shareButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SEND)
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.settings_share_app_content))
-
-            startActivity(
-                Intent.createChooser(
-                    intent, getString(R.string.settings_share_app_chooser_title)
-                )
-            )
+            sharingInteractor.shareApp()
         }
 
         supportButton.setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"))
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.settings_support_email)))
-            intent.putExtra(
-                Intent.EXTRA_SUBJECT, getString(R.string.settings_support_email_subject)
-            )
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.settings_support_email_body))
-            startActivity(intent)
+            sharingInteractor.openSupport()
         }
 
         agreementButton.setOnClickListener {
-            val intent =
-                Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.settings_agreement_url)))
-            startActivity(intent)
+            sharingInteractor.openTerms()
         }
 
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
+            val newSettings = ThemeSettings(checked)
+            settingsInteractor.updateThemeSetting(newSettings)
             (applicationContext as App).switchTheme(checked)
-            sharedPrefs.edit().putBoolean(THEME_SWITCH, checked).apply()
 
         }
     }

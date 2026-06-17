@@ -1,8 +1,8 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui
 
 import android.content.Context
 import android.content.Intent
-import android.media.MediaPlayer
+
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -16,7 +16,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.model.Track
+import com.example.playlistmaker.presentation.Creator
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import java.text.SimpleDateFormat
@@ -24,7 +26,7 @@ import java.util.Locale
 
 
 class TrackActivity : AppCompatActivity() {
-    private var mediaPlayer = MediaPlayer()
+    private val audioPlayerInteractor = Creator.provideAudioPlayerInteractor()
     private val toolbar: MaterialToolbar by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.toolbar) }
     private val trackName: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.trackName) }
     private val artistName: TextView by lazy(mode = LazyThreadSafetyMode.NONE) { findViewById(R.id.artistName) }
@@ -66,10 +68,9 @@ class TrackActivity : AppCompatActivity() {
 
         toolbar.setNavigationOnClickListener { finish() }
         track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra(EXTRA_TRACK, Track::class.java)
+            intent.getParcelableExtra(EXTRA_TRACK, Track::class.java)
         } else {
-            @Suppress("DEPRECATION") intent.getSerializableExtra(EXTRA_TRACK) as? Track
-
+            @Suppress("DEPRECATION") intent.getParcelableExtra(EXTRA_TRACK) as? Track
         }
 
         track?.let {
@@ -87,7 +88,7 @@ class TrackActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        audioPlayerInteractor.release()
         handler.removeCallbacks(timerRunnable)
     }
 
@@ -142,30 +143,30 @@ class TrackActivity : AppCompatActivity() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(track?.previewUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playPauseButton.isEnabled = true
-            playerState = STATE_PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            playPauseButton.setIconResource(R.drawable.play_button)
-            playerState = STATE_PREPARED
-            handler.removeCallbacks(timerRunnable)
-            currentPlaytime.text = "00:00"
-        }
+        audioPlayerInteractor.prepare(
+            track?.previewUrl ?: "",
+            onPrepared = {
+                playPauseButton.isEnabled = true
+                playerState = STATE_PREPARED
+            }, onCompletion = {
+                playPauseButton.setIconResource(R.drawable.play_button)
+                playerState = STATE_PREPARED
+                handler.removeCallbacks(timerRunnable)
+                currentPlaytime.text = getString(R.string.time_zero)
+            }
+
+        )
     }
 
-
     private fun startPlayer() {
-        mediaPlayer.start()
+        audioPlayerInteractor.start()
         playPauseButton.setIconResource(R.drawable.pause_button)
         playerState = STATE_PLAYING
         handler.post(timerRunnable)
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
+        audioPlayerInteractor.pause()
         playPauseButton.setIconResource(R.drawable.play_button)
         playerState = STATE_PAUSED
         handler.removeCallbacks(timerRunnable)
@@ -174,12 +175,11 @@ class TrackActivity : AppCompatActivity() {
     private fun updateTimer() {
         when (playerState) {
             STATE_PLAYING -> {
-                currentPlaytime.text = dateFormat.format(mediaPlayer.currentPosition)
+                currentPlaytime.text = dateFormat.format(audioPlayerInteractor.getCurrentPosition())
                 handler.postDelayed(timerRunnable, 200L)
             }
         }
     }
-
 
     companion object {
         private const val EXTRA_TRACK = "extra_track"
@@ -193,5 +193,4 @@ class TrackActivity : AppCompatActivity() {
             }
         }
     }
-
 }
